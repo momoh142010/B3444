@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Liste des Personnes</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Liste des Personnes</h1>
+        <ul id="liste-personnes">
+            <li>M. Yann GRIPAY (yann.gripay@insa-lyon.fr)</li>
+            <li>Mme Anne TCHOUNIKINE (anne.tchounikine@insa-lyon.fr)</li>
+            <li>Mme Berenice SALLIOT (berenice.salliot@insa-lyon.fr)</li>
+            <li>M Mohamed CHALLAL (mohamed.challal@insa-lyon.fr)</li>
+        </ul>
+        <a href="index.html">Retour à l'Accueil</a>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            function ajouter(personne) {
+                //var liste = document.getElementById("liste");
+                $('#liste-personnes').append("<li>" + personne["civilite"] + " "
+                                                    + personne["prenom"] + " "
+                                                    + personne["nom"] + " ("
+                                                    + personne["email"] + ")"
+                                                    + " <a href='detail.html?id="+personne["id"]+"'>details</a></li>");
+            }
+            $(document).ready(function () {
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                    action: 'processRequest'
+                    },
+                    dataType: 'json'
+                    }).done(function (data) {
+                        $('#liste-personnes').empty();
+                        var personnes = data.personnes;
+                        for (var i = 0; i < personnes.length; i++) {
+                            ajouter(data.personnes[i]);
+                        }
+                });
+            });
+        </script>
+    </body>
+</html>
